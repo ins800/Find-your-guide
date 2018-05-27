@@ -4,6 +4,14 @@ You can use the [editor on GitHub](https://github.com/ins800/Find-your-guide/edi
 
 Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
 
+<iframe
+  width="600"
+  height="450"
+  frameborder="0" style="border:0"
+  src="https://www.google.com/maps/embed/v1/place?key=AIzaSyCKdcC-NG_KchhKgfNanSdKYvGgAVhueAA
+    &q=Space+Needle,Seattle+WA" allowfullscreen>
+</iframe>
+
 ### Markdown
 
 Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
