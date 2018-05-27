@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+       /* Set the size of the div element that contains the map */
+      #map {
+        height: 800px;
+        width: 100%;
+       }
+    </style>
+  </head>
+  <body>
+    <h3>Find Your Guide!</h3>
+    <!--The div element for the map -->
+    <div id="map"></div>
+    <script>
+    // Initialize and add the map
+    function initMap() {
+      // The guides
+      var guides = [
+        {
+          id: 1,
+          name: 'José',
+          contact: '960 000 000'
+        },
+        {
+          id: 2,
+          name: 'Maria',
+          contact: '960 111 222'
+        },
+        {
+          id: 3,
+          name: 'João',
+          contact: '960 333 444'
+        },
+        {
+          id: 4,
+          name: 'Joana',
+          contact: '960 555 666'
+        }
+      ];
+      // The locations
+      var locations = [
+        {
+          name: 'Castelo de Guimarães',
+          placeId: 'ChIJIzwXZuzvJA0ROaxWynCX6fw',
+          guideIds: [1,2,3,4]
+        },
+        {
+          name: 'Paço dos Duques de Bragança',
+          placeId: 'ChIJq52uv5jlJA0RbHxYi2q2xlw',
+          guideIds: [1,4]
+        },
+        {
+          name: 'Citânia dos Briteiros',
+          placeId: 'ChIJP8TokU77JA0RWjWRAaUxCeY',
+          guideIds: [2,3,4]
+        },
+        {
+          name: 'Plataforma das Artes e da Criatividade',
+          placeId: 'ChIJgy2e0OfvJA0RhRa4JuBoAFw',
+          guideIds: [1,2]
+        },
+        {
+          name: 'Centro Internacional das Artes José de Guimarães',
+          placeId: 'ChIJ4wtCvefvJA0RvpH4C1ZEiKE',
+          guideIds: [1]
+        },
+        {
+          name: 'Convento dos Capuchos',
+          placeId: 'ChIJEfceGezvJA0REsEFkTo0iug',
+          guideIds: [3,4]
+        },
+        {
+          name: 'Museu de Alberto Sampaio',
+          placeId: 'ChIJifisHervJA0RmvBrAft9ToQ',
+          guideIds: [3,4]
+        },
+        {
+          name: 'Museu da Cultura Castreja',
+          placeId: 'ChIJ-6-yNEf7JA0RIotJSXwd5mc',
+          guideIds: [2,4]
+        },
+        {
+          name: 'Museu Arqueológico Martins Sarmento',
+          placeId: 'ChIJ19TaQejvJA0R4FEqeB4dFAA',
+          guideIds: [1,4]
+        }
+      ];
+
+      // The map, centered at first marker
+      var map = new google.maps.Map(
+        document.getElementById('map'), {
+          zoom: 16,
+          center: { lat: 41.448312, lng: -8.290341 }
+        }
+      );
+      var infowindow = new google.maps.InfoWindow();
+      var service = new google.maps.places.PlacesService(map);
+
+      function renderPlaceInfoContent(place){
+        var location = locations.filter(function(loc){
+          return loc.placeId == place.place_id
+        })[0];
+        var guides_for_this_location = guides.filter(function(guide){
+          return location.guideIds.indexOf(guide.id) != -1;
+        });
+        var guides_content = guides_for_this_location.map(function(guide){
+          return '- ' + guide.name + ' | ' + guide.contact + '<br>';
+        });
+        return '<div>' +
+        '<strong>' + place.name + '</strong><br>' +
+        'Guides:' + '<br>' +
+        guides_content.join('') +
+        '<i>' + place.formatted_address + '</i>' +
+        '</div>'
+      }
+
+      function setPlaceOnMap(place, status) {
+        if (status === google.maps.places.PlacesServiceStatus.OK) {
+          var marker = new google.maps.Marker({
+            map: map,
+            position: place.geometry.location
+          });
+          google.maps.event.addListener(marker, 'click', function(){
+            infowindow.setContent(renderPlaceInfoContent(place));
+            infowindow.open(map, this);
+          });
+        }
+      };
+
+      locations.forEach(function(location){
+        service.getDetails({ placeId: location.placeId }, setPlaceOnMap);
+      });
+    }
+    </script>
+    <!--Load the API from the specified URL
+    * The async attribute allows the browser to render the page while the API loads
+    * The key parameter will contain your own API key (which is not needed for this tutorial)
+    * The callback parameter executes the initMap() function
+    -->
+    <script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD1fpSKHgTPUlj5eSX_67mkKFYwRa53IF4&callback=initMap&libraries=places">
+    </script>
+  </body>
+</html>
